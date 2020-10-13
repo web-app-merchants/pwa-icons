@@ -105,12 +105,9 @@ const generateIcons = (pwaIconsConfig: PWAIconsConfig) => {
   jimp
     .read(iconInput)
     .then((icon) => {
-      const fileExtension = iconName.slice(
-        ((iconName.lastIndexOf('.') - 1) >>> 0) + 2,
-      );
-      const inputFileExtension = iconInput.slice(
-        ((iconInput.lastIndexOf('.') - 1) >>> 0) + 2,
-      );
+      const fileExtension =  getFileExtension(iconName);
+      const inputFileExtension = getFileExtension(iconInput);
+
       createAssetIcons(pwaIconsConfig, icon, fileExtension);
     })
     .catch((error: string | unknown) => {
@@ -144,6 +141,10 @@ const createAssetIcons = (
     console.log(colors.red(`✗  use file extension .png`));
   }
 };
+
+const getFileExtension = (iconInput: string): string => {
+   return iconInput.slice(((iconInput.lastIndexOf('.') - 1) >>> 0) + 2,);
+}
 
 const iconExists = (iconPath: string): Promise<never | boolean> => {
   return new Promise((resolve, reject) => {
