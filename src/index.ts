@@ -2,6 +2,7 @@ import colors from 'colors';
 import favicons from 'favicons';
 import fs from 'fs';
 import jimp from 'jimp';
+import toIco from "to-ico";
 import yargs from 'yargs';
 import { PWAIconsConfig } from './pwa-icons-config.interface';
 
@@ -130,8 +131,7 @@ const generateIcons = (pwaIconsConfig: PWAIconsConfig) => {
     faviconsConfig = { ...faviconsConfig, path: faviconOutput };
 
     createAssetIcons(pwaIconsConfig, icon, fileExtension);
-    createFavicons(iconInput);
-    
+    createFavicons(iconInput, faviconOutput);
   });
 };
 
@@ -160,7 +160,7 @@ const createAssetIcons = (
   }
 };
 
-const createFavicons = (iconInput: string) => {
+const createFavicons = (iconInput: string, faviconOutput: string) => {
   favicons(iconInput, faviconsConfig)
     .then((response) => {
       console.log(colors.blue(`⌛  Generating Favicons`));
@@ -170,13 +170,42 @@ const createFavicons = (iconInput: string) => {
       });
 
       console.log(colors.green(`✓ ${faviconOutput}/apple-touch-icon.png`));
+      generateIcoFile(faviconOutput);
     })
     .catch((error: Error) => {
       console.log(colors.red(`✗ favicon error: ${error.message}`));
     });
 };
 
-// generateIcoFile(faviconOutput);
+
+
+const generateIcoFile = (faviconOutput: string) => {
+
+    const files = {
+      content: [
+        fs.readFileSync(`${faviconOutput}/favicon-16x16.png`),
+        fs.readFileSync(`${faviconOutput}/favicon-32x32.png`),
+        fs.readFileSync(`${faviconOutput}/favicon-48x48.png`),
+      ],
+  
+      paths: [
+        `${faviconOutput}/favicon-16x16.png`,
+        `${faviconOutput}/favicon-32x32.png`,
+        `${faviconOutput}/favicon-48x48.png`,
+      ],
+    };
+  
+    toIco(files.content).then((file) => {
+      fs.writeFileSync(`${faviconOutput}/favicon.ico`, file);
+      
+      files.paths.map((file) => {
+        fs.unlinkSync(file);
+      });
+  
+      console.log(colors.green(`✓ ${faviconOutput}/favicon.ico`));
+      console.log(colors.yellow(`★ Finished`));
+    });
+  };
 
 const getFileExtension = (iconInput: string): string => {
   return iconInput.slice(((iconInput.lastIndexOf('.') - 1) >>> 0) + 2);
