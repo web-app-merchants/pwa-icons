@@ -1,4 +1,5 @@
 import colors from 'colors';
+import favicons from 'favicons';
 import fs from 'fs';
 import jimp from 'jimp';
 import yargs from 'yargs';
@@ -17,6 +18,25 @@ let sizesArray: number[] = [];
 let iconName = '';
 let iconSizes = '';
 let isDryRun = false;
+
+// TODO:Pull Request to add string[] to favicons Configuration interface
+const faviconsConfig: favicons.Configuration = {
+    path: './src',
+    icons: {
+      android: false,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      appleIcon: ['apple-touch-icon.png'], // eslint-disable-line
+      appleStartup: false,
+      coast: false,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      favicons: ['favicon-48x48.png', 'favicon-32x32.png', 'favicon-16x16.png'],
+      firefox: false,
+      windows: false,
+      yandex: false,
+    },
+  };
 
 let pwaIconsConfig = {
   iconInput,
@@ -120,7 +140,7 @@ const createAssetIcons = (
   icon: jimp,
   fileExtension: string,
 ) => {
-  const { iconOutput, sizesArray, iconName, isDryRun } = pwaIconsConfig;
+  const { iconOutput, sizesArray, iconName, isDryRun } = pwaIconConfig;
 
   if (fileExtension === 'png') {
     console.log(colors.blue(`⌛  Generating PWA icons`));
