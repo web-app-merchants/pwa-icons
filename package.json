@@ -1,0 +1,20 @@
+{
+  "name": "pwa-icons",
+  "version": "1.0.0",
+  "description": "![PWA icons](./pwa-icons_2.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/web-app-merchants/pwa-icons.git"
+  },
+  "keywords": [],
+  "author": "Tayamba Mwanza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/web-app-merchants/pwa-icons/issues"
+  },
+  "homepage": "https://github.com/web-app-merchants/pwa-icons#readme"
+}
