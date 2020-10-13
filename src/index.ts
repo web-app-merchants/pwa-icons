@@ -4,11 +4,17 @@
 import yargs from 'yargs';
 
 
-let defaultIconInput = './icon.png';
-let defaultIconOutput = './src/assets/icons';
-let defaultFaviconOutput = './src';
-let defaultSizes = "512, 384, 192, 152, 144, 128, 96, 72";
-let defaultIconName = 'icon-*x*.png';
+const defaultIconInput = './icon.png';
+const defaultIconOutput = './src/assets/icons';
+const defaultFaviconOutput = './src';
+const defaultSizes = '512, 384, 192, 152, 144, 128, 96, 72';
+const defaultIconName = 'icon-*x*.png';
+
+let iconInput = '';
+let iconOutput = '';
+let faviconOutput = '';
+let sizesArray = [];
+let iconName = '';
 let isDryRun = false;
 
 
@@ -44,21 +50,34 @@ const argumentValues = yargs(process.argv.slice(2))
         requiresArg: true,
         required: false,
       },
-      size: {
+      sizes: {
         alias: 's',
         description: 'Resize to',
         default: defaultSizes,
         requiresArg: true,
         required: false,
       },
-      name: {
+      iconName: {
         alias: 'n',
-        description: 'Icon names (replace wildcard * with size)',
+        description: 'Output Icon name (replace wildcard * with size)',
         default: defaultIconName,
         requiresArg: true,
         required: false,
       },
 }).argv;
+
+iconInput = argumentValues.icon ? argumentValues.icon : defaultIconInput;
+iconOutput = argumentValues.output ? argumentValues.output : defaultIconOutput;
+faviconOutput = argumentValues.faviconOutput ? argumentValues.faviconOutput : defaultFaviconOutput;
+iconName = argumentValues.iconName ? argumentValues.iconName : defaultIconName;
+isDryRun = argumentValues['dry-run'] ? true : false;
+
+console.log('dry run:', isDryRun === false ? 'off' : 'on');
+
+if (argumentValues.size) {
+  const iconSizes = '' + argumentValues.sizes;
+  sizesArray = iconSizes.split(' ').join(',').split(',');
+}
 
 
 
