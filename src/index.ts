@@ -4,7 +4,6 @@ import fs from "fs";
 import yargs from 'yargs';
 import { PWAIconsConfig } from "./pwa-icons-config.interface";
 
-
 const defaultIconInput = './icon.png';
 const defaultIconOutput = './src/assets/icons';
 const defaultFaviconOutput = './src';
@@ -18,7 +17,14 @@ let sizesArray: string[] = [];
 let iconName = '';
 let isDryRun = false;
 
-let pwaIconsConfig: PWAIconsConfig;
+let pwaIconsConfig = {
+    iconInput,
+    iconOutput,
+    faviconOutput,
+    sizesArray,
+    iconName,
+    isDryRun
+}
 
 
 const argumentValues = yargs(process.argv.slice(2))
@@ -82,7 +88,8 @@ if (argumentValues.size) {
   sizesArray = iconSizes.split(' ').join(',').split(',');
 }
 
-pwaIconsConfig = {
+ pwaIconsConfig = {
+     ...pwaIconsConfig,
     iconInput,
     iconOutput,
     faviconOutput,
@@ -92,7 +99,7 @@ pwaIconsConfig = {
 }
 
 const generateIcons = (pwaIconsConfig: PWAIconsConfig) => {
-
+    console.log(pwaIconsConfig);
 }
 
 
