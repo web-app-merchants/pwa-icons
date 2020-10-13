@@ -13,8 +13,9 @@ const defaultIconName = 'icon-*x*.png';
 let iconInput = '';
 let iconOutput = '';
 let faviconOutput = '';
-let sizesArray: string[] = [];
+let sizesArray: number[] = [];
 let iconName = '';
+let iconSizes = '';
 let isDryRun = false;
 
 let pwaIconsConfig = {
@@ -81,17 +82,12 @@ faviconOutput = argumentValues.faviconOutput
   : defaultFaviconOutput;
 iconName = argumentValues.iconName ? argumentValues.iconName : defaultIconName;
 isDryRun = argumentValues['dry-run'] ? true : false;
+iconSizes = argumentValues.sizes ? argumentValues.sizes : defaultSizes;
+
+const unfilteredSizesArray = iconSizes.split(' ').join(',').split(',');
+sizesArray = unfilteredSizesArray.filter((size) => size !== '').map((size) => parseInt(size,10));
 
 console.log('dry run:', isDryRun === false ? 'off' : 'on');
-
-if (argumentValues.size) {
-  const iconSizes = '' + argumentValues.sizes;
-  const unfilteredSizesArray = iconSizes.split(' ').join(',').split(',');
-  sizesArray = unfilteredSizesArray.filter((size) => size !== '');
-} else {
-    const unfilteredSizesArray = defaultSizes.split(' ').join(',').split(',');
-  sizesArray = unfilteredSizesArray.filter((size) => size !== '');
-}
 
 pwaIconsConfig = {
   ...pwaIconsConfig,
@@ -133,8 +129,8 @@ const createAssetIcons = (
     console.log(colors.blue(`⌛  Generating PWA icons`));
 
     sizesArray.forEach((size) => {
-      const outputName = iconName.split('*').join(size);
-      const sizeNumber = parseInt(size);
+      const outputName = iconName.split('*').join(size.toString());
+      const sizeNumber = size;
       const outputFolder = `${iconOutput}/${outputName}`;
 
       

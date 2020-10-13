@@ -2,7 +2,7 @@ export interface PWAIconsConfig {
  iconInput: string;
  iconOutput: string;
  faviconOutput: string;
- sizesArray: string[];
+ sizesArray: number[];
  iconName: string;
  isDryRun: boolean;
 }
