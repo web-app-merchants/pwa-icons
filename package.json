@@ -1,5 +1,5 @@
 {
-  "name": "pwa-icons",
+  "name": "@wam/pwa-icons",
   "version": "1.0.0",
   "description": "![PWA icons](./pwa-icons_2.png)",
   "main": "index.js",
