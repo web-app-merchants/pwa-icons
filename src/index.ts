@@ -20,23 +20,23 @@ let iconSizes = '';
 let isDryRun = false;
 
 // TODO:Pull Request to add string[] to favicons Configuration interface
-const faviconsConfig: favicons.Configuration = {
-    path: './src',
-    icons: {
-      android: false,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      appleIcon: ['apple-touch-icon.png'], // eslint-disable-line
-      appleStartup: false,
-      coast: false,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      favicons: ['favicon-48x48.png', 'favicon-32x32.png', 'favicon-16x16.png'],
-      firefox: false,
-      windows: false,
-      yandex: false,
-    },
-  };
+let faviconsConfig: favicons.Configuration = {
+  path: './src',
+  icons: {
+    android: false,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    appleIcon: ['apple-touch-icon.png'], // eslint-disable-line
+    appleStartup: false,
+    coast: false,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    favicons: ['favicon-48x48.png', 'favicon-32x32.png', 'favicon-16x16.png'],
+    firefox: false,
+    windows: false,
+    yandex: false,
+  },
+};
 
 let pwaIconsConfig = {
   iconInput,
@@ -105,7 +105,9 @@ isDryRun = argumentValues['dry-run'] ? true : false;
 iconSizes = argumentValues.sizes ? argumentValues.sizes : defaultSizes;
 
 const unfilteredSizesArray = iconSizes.split(' ').join(',').split(',');
-sizesArray = unfilteredSizesArray.filter((size) => size !== '').map((size) => parseInt(size,10));
+sizesArray = unfilteredSizesArray
+  .filter((size) => size !== '')
+  .map((size) => parseInt(size, 10));
 
 console.log('dry run:', isDryRun === false ? 'off' : 'on');
 
@@ -120,19 +122,17 @@ pwaIconsConfig = {
 };
 
 const generateIcons = (pwaIconsConfig: PWAIconsConfig) => {
-  const { iconInput, iconName } = pwaIconsConfig;
+  const { iconInput, iconName, faviconOutput } = pwaIconsConfig;
 
-  jimp
-    .read(iconInput)
-    .then((icon) => {
-      const fileExtension =  getFileExtension(iconName);
-      const inputFileExtension = getFileExtension(iconInput);
+  jimp.read(iconInput).then((icon) => {
+    const fileExtension = getFileExtension(iconName);
+    const inputFileExtension = getFileExtension(iconInput);
+    faviconsConfig = { ...faviconsConfig, path: faviconOutput };
 
-      createAssetIcons(pwaIconsConfig, icon, fileExtension);
-    })
-    .catch((error: string | unknown) => {
-      console.log(colors.red(`✗  ${error}`));
-    });
+    createAssetIcons(pwaIconsConfig, icon, fileExtension);
+    createFavicons(iconInput);
+    
+  });
 };
 
 const createAssetIcons = (
@@ -143,14 +143,12 @@ const createAssetIcons = (
   const { iconOutput, sizesArray, iconName, isDryRun } = pwaIconConfig;
 
   if (fileExtension === 'png') {
-    console.log(colors.blue(`⌛  Generating PWA icons`));
+    console.log(colors.blue(`⌛ Generating PWA icons`));
 
     sizesArray.forEach((size) => {
       const outputName = iconName.split('*').join(size.toString());
       const sizeNumber = size;
       const outputFolder = `${iconOutput}/${outputName}`;
-
-      
 
       if (isDryRun === false) {
         icon.resize(sizeNumber, sizeNumber).write(outputFolder);
@@ -162,9 +160,27 @@ const createAssetIcons = (
   }
 };
 
+const createFavicons = (iconInput: string) => {
+  favicons(iconInput, faviconsConfig)
+    .then((response) => {
+      console.log(colors.blue(`⌛  Generating Favicons`));
+
+      response.images.map((image) => {
+        fs.writeFileSync(`${faviconOutput}/${image.name}`, image.contents);
+      });
+
+      console.log(colors.green(`✓ ${faviconOutput}/apple-touch-icon.png`));
+    })
+    .catch((error: Error) => {
+      console.log(colors.red(`✗ favicon error: ${error.message}`));
+    });
+};
+
+// generateIcoFile(faviconOutput);
+
 const getFileExtension = (iconInput: string): string => {
-   return iconInput.slice(((iconInput.lastIndexOf('.') - 1) >>> 0) + 2,);
-}
+  return iconInput.slice(((iconInput.lastIndexOf('.') - 1) >>> 0) + 2);
+};
 
 const iconExists = (iconPath: string): Promise<never | boolean> => {
   return new Promise((resolve, reject) => {
