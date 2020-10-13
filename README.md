@@ -1,6 +1,6 @@
 # pwa-icons
 
-![PWA icons](./pwa-icons_2.png)
+![PWA icons](./pwa-icons.png)
 
 Angular default PWA icon generator
 
