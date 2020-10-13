@@ -1,7 +1,7 @@
 {
   "name": "@wam/pwa-icons",
   "version": "1.0.0",
-  "description": "![PWA icons](./pwa-icons_2.png)",
+  "description": "Generate default @angular/pwa icon set for angular projects using a custom .png icon.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
