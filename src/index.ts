@@ -1,6 +1,6 @@
 // import jimp from "jimp";
-// import colors from "colors";
-// import fs from "fs";
+import colors from "colors";
+import fs from "fs";
 import yargs from 'yargs';
 
 
@@ -79,6 +79,21 @@ if (argumentValues.size) {
   sizesArray = iconSizes.split(' ').join(',').split(',');
 }
 
+
+const iconExists = (iconPath: string) => {
+
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(iconPath)) {
+        console.log(colors.blue(`✓ '${iconPath}' exists.`));
+        console.log(colors.blue('-'.repeat(process.stdout.columns)));
+        resolve(true);
+      } else {
+        const error = `'${iconPath}' does not exist!`;
+        reject(error);
+      }
+    });
+
+  };
 
 
 // jimp.read();
