@@ -2,6 +2,7 @@
 import colors from "colors";
 import fs from "fs";
 import yargs from 'yargs';
+import { PWAIconsConfig } from "./pwa-icons-config.interface";
 
 
 const defaultIconInput = './icon.png';
@@ -13,9 +14,11 @@ const defaultIconName = 'icon-*x*.png';
 let iconInput = '';
 let iconOutput = '';
 let faviconOutput = '';
-let sizesArray = [];
+let sizesArray: string[] = [];
 let iconName = '';
 let isDryRun = false;
+
+let pwaIconsConfig: PWAIconsConfig;
 
 
 const argumentValues = yargs(process.argv.slice(2))
@@ -79,8 +82,21 @@ if (argumentValues.size) {
   sizesArray = iconSizes.split(' ').join(',').split(',');
 }
 
+pwaIconsConfig = {
+    iconInput,
+    iconOutput,
+    faviconOutput,
+    sizesArray,
+    iconName,
+    isDryRun
+}
 
-const iconExists = (iconPath: string) => {
+const generateIcons = (pwaIconsConfig: PWAIconsConfig) => {
+
+}
+
+
+const iconExists = (iconPath: string): Promise<never | boolean> => {
 
     return new Promise((resolve, reject) => {
       if (fs.existsSync(iconPath)) {
@@ -93,7 +109,11 @@ const iconExists = (iconPath: string) => {
       }
     });
 
-  };
+};
 
 
 // jimp.read();
+
+iconExists(pwaIconsConfig.iconInput)
+  .then(() => generateIcons(pwaIconsConfig))
+  .catch((err) => console.log(colors.red(`✗  ${err}`)));
