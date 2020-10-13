@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/web-app-merchants/pwa-icons#readme",
   "devDependencies": {
+    "@types/favicons": "^5.5.0",
     "@types/node": "^14.11.8",
     "@types/yargs": "^15.0.8",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
@@ -27,8 +28,11 @@
     "typescript": "^4.0.3"
   },
   "dependencies": {
+    "@types/to-ico": "^1.1.0",
     "colors": "^1.4.0",
+    "favicons": "^6.2.0",
     "jimp": "^0.16.1",
+    "to-ico": "^1.1.5",
     "yargs": "^16.0.3"
   }
 }

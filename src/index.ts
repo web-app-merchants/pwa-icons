@@ -1,6 +1,8 @@
 import colors from 'colors';
+import favicons from 'favicons';
 import fs from 'fs';
 import jimp from 'jimp';
+import toIco from "to-ico";
 import yargs from 'yargs';
 import { PWAIconsConfig } from './pwa-icons-config.interface';
 
@@ -13,9 +15,29 @@ const defaultIconName = 'icon-*x*.png';
 let iconInput = '';
 let iconOutput = '';
 let faviconOutput = '';
-let sizesArray: string[] = [];
+let sizesArray: number[] = [];
 let iconName = '';
+let iconSizes = '';
 let isDryRun = false;
+
+// TODO:Pull Request to add string[] to favicons Configuration interface
+let faviconsConfig: favicons.Configuration = {
+  path: './src',
+  icons: {
+    android: false,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    appleIcon: ['apple-touch-icon.png'], // eslint-disable-line
+    appleStartup: false,
+    coast: false,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    favicons: ['favicon-48x48.png', 'favicon-32x32.png', 'favicon-16x16.png'],
+    firefox: false,
+    windows: false,
+    yandex: false,
+  },
+};
 
 let pwaIconsConfig = {
   iconInput,
@@ -81,17 +103,14 @@ faviconOutput = argumentValues.faviconOutput
   : defaultFaviconOutput;
 iconName = argumentValues.iconName ? argumentValues.iconName : defaultIconName;
 isDryRun = argumentValues['dry-run'] ? true : false;
+iconSizes = argumentValues.sizes ? argumentValues.sizes : defaultSizes;
+
+const unfilteredSizesArray = iconSizes.split(' ').join(',').split(',');
+sizesArray = unfilteredSizesArray
+  .filter((size) => size !== '')
+  .map((size) => parseInt(size, 10));
 
 console.log('dry run:', isDryRun === false ? 'off' : 'on');
-
-if (argumentValues.size) {
-  const iconSizes = '' + argumentValues.sizes;
-  const unfilteredSizesArray = iconSizes.split(' ').join(',').split(',');
-  sizesArray = unfilteredSizesArray.filter((size) => size !== '');
-} else {
-    const unfilteredSizesArray = defaultSizes.split(' ').join(',').split(',');
-  sizesArray = unfilteredSizesArray.filter((size) => size !== '');
-}
 
 pwaIconsConfig = {
   ...pwaIconsConfig,
@@ -104,22 +123,16 @@ pwaIconsConfig = {
 };
 
 const generateIcons = (pwaIconsConfig: PWAIconsConfig) => {
-  const { iconInput, iconName } = pwaIconsConfig;
+  const { iconInput, iconName, faviconOutput } = pwaIconsConfig;
 
-  jimp
-    .read(iconInput)
-    .then((icon) => {
-      const fileExtension = iconName.slice(
-        ((iconName.lastIndexOf('.') - 1) >>> 0) + 2,
-      );
-      const inputFileExtension = iconInput.slice(
-        ((iconInput.lastIndexOf('.') - 1) >>> 0) + 2,
-      );
-      createAssetIcons(pwaIconsConfig, icon, fileExtension);
-    })
-    .catch((error: string | unknown) => {
-      console.log(colors.red(`✗  ${error}`));
-    });
+  jimp.read(iconInput).then((icon) => {
+    const fileExtension = getFileExtension(iconName);
+    const inputFileExtension = getFileExtension(iconInput);
+    faviconsConfig = { ...faviconsConfig, path: faviconOutput };
+
+    createAssetIcons(pwaIconsConfig, icon, fileExtension);
+    createFavicons(iconInput, faviconOutput);
+  });
 };
 
 const createAssetIcons = (
@@ -127,17 +140,15 @@ const createAssetIcons = (
   icon: jimp,
   fileExtension: string,
 ) => {
-  const { iconOutput, sizesArray, iconName, isDryRun } = pwaIconsConfig;
+  const { iconOutput, sizesArray, iconName, isDryRun } = pwaIconConfig;
 
   if (fileExtension === 'png') {
-    console.log(colors.blue(`⌛  Generating PWA icons`));
+    console.log(colors.blue(`⌛ Generating PWA icons`));
 
     sizesArray.forEach((size) => {
-      const outputName = iconName.split('*').join(size);
-      const sizeNumber = parseInt(size);
+      const outputName = iconName.split('*').join(size.toString());
+      const sizeNumber = size;
       const outputFolder = `${iconOutput}/${outputName}`;
-
-      
 
       if (isDryRun === false) {
         icon.resize(sizeNumber, sizeNumber).write(outputFolder);
@@ -147,6 +158,57 @@ const createAssetIcons = (
   } else {
     console.log(colors.red(`✗  use file extension .png`));
   }
+};
+
+const createFavicons = (iconInput: string, faviconOutput: string) => {
+  favicons(iconInput, faviconsConfig)
+    .then((response) => {
+      console.log(colors.blue(`⌛  Generating Favicons`));
+
+      response.images.map((image) => {
+        fs.writeFileSync(`${faviconOutput}/${image.name}`, image.contents);
+      });
+
+      console.log(colors.green(`✓ ${faviconOutput}/apple-touch-icon.png`));
+      generateIcoFile(faviconOutput);
+    })
+    .catch((error: Error) => {
+      console.log(colors.red(`✗ favicon error: ${error.message}`));
+    });
+};
+
+
+
+const generateIcoFile = (faviconOutput: string) => {
+
+    const files = {
+      content: [
+        fs.readFileSync(`${faviconOutput}/favicon-16x16.png`),
+        fs.readFileSync(`${faviconOutput}/favicon-32x32.png`),
+        fs.readFileSync(`${faviconOutput}/favicon-48x48.png`),
+      ],
+  
+      paths: [
+        `${faviconOutput}/favicon-16x16.png`,
+        `${faviconOutput}/favicon-32x32.png`,
+        `${faviconOutput}/favicon-48x48.png`,
+      ],
+    };
+  
+    toIco(files.content).then((file) => {
+      fs.writeFileSync(`${faviconOutput}/favicon.ico`, file);
+      
+      files.paths.map((file) => {
+        fs.unlinkSync(file);
+      });
+  
+      console.log(colors.green(`✓ ${faviconOutput}/favicon.ico`));
+      console.log(colors.yellow(`★ Finished`));
+    });
+  };
+
+const getFileExtension = (iconInput: string): string => {
+  return iconInput.slice(((iconInput.lastIndexOf('.') - 1) >>> 0) + 2);
 };
 
 const iconExists = (iconPath: string): Promise<never | boolean> => {
