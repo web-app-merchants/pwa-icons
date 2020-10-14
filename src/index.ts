@@ -13,6 +13,7 @@ const defaultFaviconOutput = './src';
 const sizes = '512, 384, 192, 152, 144, 128, 96, 72';
 
 let projectName = '';
+let projectRootPath = '';
 let iconInput = '';
 let iconOutput = '';
 let faviconOutput = '';
@@ -38,8 +39,9 @@ let faviconsConfig: favicons.Configuration = {
   },
 };
 
-let pwaIconsConfig = {
+let pwaIconsConfig: PWAIconsConfig = {
   projectName,
+  projectRootPath,
   iconInput,
   iconOutput,
   faviconOutput,
@@ -131,9 +133,12 @@ const getProjectPath = () => {
       console.log(colors.cyan(`🛈  Using project: ${projectName}`));
     }
 
-    const projectRootPath = angularWorkspace.projects[projectName].sourceRoot;
+    projectRootPath = angularWorkspace.projects[projectName].root;
+
     pwaIconsConfig = {
       ...pwaIconsConfig,
+      projectName,
+      projectRootPath,
       iconInput: `./${projectRootPath}/${iconInput}`,
       faviconOutput: `./${projectRootPath}`,
       iconOutput: `./${projectRootPath}/${iconOutput}`,
@@ -223,6 +228,35 @@ const createFavicons = (iconInput: string, faviconOutput: string) => {
     });
 };
 
+const updateAngularJSON = (pwaIconsConfig: PWAIconsConfig) => {
+
+  try {
+    const angularWorkspace = JSON.parse(
+      fs.readFileSync('angular.json').toString(),
+    );
+
+   const assetsArray: string[] = angularWorkspace.projects[pwaIconsConfig.projectName].architect.build.options.assets;
+
+   const appleTouchIcon = `${pwaIconsConfig.projectRootPath}/apple-touch-icon.png`;
+
+   
+    
+   if (assetsArray.includes(appleTouchIcon)) {
+    console.log(colors.yellow(`★ Finished`));
+   } else {
+    angularWorkspace.projects[pwaIconsConfig.projectName].architect.build.options.assets.push(appleTouchIcon);
+    fs.writeFileSync('angular.json',JSON.stringify(angularWorkspace,null,2));
+    console.log(colors.green(`✓ 'angular.json' updated`));
+    console.log(colors.yellow(`★ Finished`));
+   }
+
+
+
+  } catch {
+    console.log(colors.yellow(`★ Finished`));
+  }
+}
+
 const generateIcoFile = (faviconOutput: string) => {
   const contents = [
     fs.readFileSync(`${faviconOutput}/favicon-16x16.png`),
@@ -244,7 +278,7 @@ const generateIcoFile = (faviconOutput: string) => {
     });
 
     console.log(colors.green(`✓ ${faviconOutput}/favicon.ico`));
-    console.log(colors.yellow(`★ Finished`));
+    updateAngularJSON(pwaIconsConfig);
   });
 };
 
