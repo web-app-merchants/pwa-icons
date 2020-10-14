@@ -117,7 +117,8 @@ pwaIconsConfig = __assign(__assign({}, pwaIconsConfig), { projectName: projectNa
     faviconOutput: faviconOutput,
     sizesArray: sizesArray,
     isDryRun: isDryRun });
-var getProjectPath = function () {
+console.log(pwaIconsConfig);
+var getProjectPath = function (pwaIconConfig) {
     var projectName = '';
     try {
         var angularWorkspace = JSON.parse(fs_1.default.readFileSync('angular.json').toString());
@@ -126,7 +127,7 @@ var getProjectPath = function () {
             console.log(colors_1.default.cyan("\uD83D\uDEC8  Using default project: " + projectName));
         }
         else {
-            projectName = angularWorkspace[pwaIconsConfig.projectName];
+            projectName = pwaIconsConfig.projectName;
             console.log(colors_1.default.cyan("\uD83D\uDEC8  Using project: " + projectName));
         }
         projectRootPath = angularWorkspace.projects[projectName].root;
@@ -245,4 +246,4 @@ var iconExists = function (iconPath) {
         console.log(colors_1.default.red("\u2717  " + error));
     }
 };
-getProjectPath();
+getProjectPath(pwaIconsConfig);

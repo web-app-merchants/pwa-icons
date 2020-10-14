@@ -117,7 +117,7 @@ pwaIconsConfig = {
   isDryRun,
 };
 
-const getProjectPath = () => {
+const getProjectPath = (pwaIconConfig: PWAIconsConfig) => {
   let projectName = '';
 
   try {
@@ -129,7 +129,8 @@ const getProjectPath = () => {
       projectName = angularWorkspace['defaultProject'];
       console.log(colors.cyan(`🛈  Using default project: ${projectName}`));
     } else {
-      projectName = angularWorkspace[pwaIconsConfig.projectName];
+
+      projectName = pwaIconsConfig.projectName;
       console.log(colors.cyan(`🛈  Using project: ${projectName}`));
     }
 
@@ -303,5 +304,5 @@ const iconExists = (iconPath: string) => {
     }
 };
 
-getProjectPath();
+getProjectPath(pwaIconsConfig);
 
