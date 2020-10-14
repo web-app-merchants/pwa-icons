@@ -143,6 +143,9 @@ const getProjectPath = () => {
       faviconOutput: `./${projectRootPath}`,
       iconOutput: `./${projectRootPath}/${iconOutput}`,
     };
+
+    iconExists(pwaIconsConfig.iconInput);
+
   } catch {
     if (projectName === '') {
       console.log(
@@ -150,12 +153,16 @@ const getProjectPath = () => {
           `🛈  No 'angular.json' found in workspace, using fallback path`,
         ),
       );
+
+      iconExists(pwaIconsConfig.iconInput);
     } else {
       console.log(
         colors.cyan(
           `🛈  Project '${projectName}' not found in workspace, using fallback path`,
         ),
       );
+
+      iconExists(pwaIconsConfig.iconInput);
     }
 
     pwaIconsConfig = {
@@ -286,22 +293,15 @@ const getFileExtension = (iconInput: string): string => {
   return iconInput.slice(((iconInput.lastIndexOf('.') - 1) >>> 0) + 2);
 };
 
-const iconExists = (iconPath: string): Promise<never | boolean> => {
-  return new Promise((resolve, reject) => {
+const iconExists = (iconPath: string) => {
     if (fs.existsSync(iconPath)) {
-      console.log(iconPath);
       console.log(colors.blue(`✓ '${iconPath}' exists.`));
       console.log(colors.blue('-'.repeat(process.stdout.columns)));
-      resolve(true);
     } else {
       const error = `'${iconPath}' does not exist!`;
-      reject(error);
+      console.log(colors.red(`✗  ${error}`));
     }
-  });
 };
 
-iconExists(pwaIconsConfig.iconInput)
-  .then(() => {
-    getProjectPath();
-  })
-  .catch((err) => console.log(colors.red(`✗  ${err}`)));
+getProjectPath();
+

@@ -132,13 +132,16 @@ var getProjectPath = function () {
         projectRootPath = angularWorkspace.projects[projectName].root;
         pwaIconsConfig = __assign(__assign({}, pwaIconsConfig), { projectName: projectName,
             projectRootPath: projectRootPath, iconInput: "./" + projectRootPath + "/" + iconInput, faviconOutput: "./" + projectRootPath, iconOutput: "./" + projectRootPath + "/" + iconOutput });
+        iconExists(pwaIconsConfig.iconInput);
     }
     catch (_a) {
         if (projectName === '') {
             console.log(colors_1.default.cyan("\uD83D\uDEC8  No 'angular.json' found in workspace, using fallback path"));
+            iconExists(pwaIconsConfig.iconInput);
         }
         else {
             console.log(colors_1.default.cyan("\uD83D\uDEC8  Project '" + projectName + "' not found in workspace, using fallback path"));
+            iconExists(pwaIconsConfig.iconInput);
         }
         pwaIconsConfig = __assign(__assign({}, pwaIconsConfig), { iconInput: "./" + iconInput, iconOutput: "./src/" + iconOutput, faviconOutput: faviconOutput });
     }
@@ -233,21 +236,13 @@ var getFileExtension = function (iconInput) {
     return iconInput.slice(((iconInput.lastIndexOf('.') - 1) >>> 0) + 2);
 };
 var iconExists = function (iconPath) {
-    return new Promise(function (resolve, reject) {
-        if (fs_1.default.existsSync(iconPath)) {
-            console.log(iconPath);
-            console.log(colors_1.default.blue("\u2713 '" + iconPath + "' exists."));
-            console.log(colors_1.default.blue('-'.repeat(process.stdout.columns)));
-            resolve(true);
-        }
-        else {
-            var error = "'" + iconPath + "' does not exist!";
-            reject(error);
-        }
-    });
+    if (fs_1.default.existsSync(iconPath)) {
+        console.log(colors_1.default.blue("\u2713 '" + iconPath + "' exists."));
+        console.log(colors_1.default.blue('-'.repeat(process.stdout.columns)));
+    }
+    else {
+        var error = "'" + iconPath + "' does not exist!";
+        console.log(colors_1.default.red("\u2717  " + error));
+    }
 };
-iconExists(pwaIconsConfig.iconInput)
-    .then(function () {
-    getProjectPath();
-})
-    .catch(function (err) { return console.log(colors_1.default.red("\u2717  " + err)); });
+getProjectPath();
