@@ -156,7 +156,7 @@ const getProjectPath = () => {
     pwaIconsConfig = {
       ...pwaIconsConfig,
       iconInput: `./${iconInput}`,
-      iconOutput: `./${iconOutput}`,
+      iconOutput: `./src/${iconOutput}`,
       faviconOutput
     };
   }
