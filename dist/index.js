@@ -201,7 +201,7 @@ var updateAngularJSON = function (pwaIconsConfig) {
     try {
         var angularWorkspace = JSON.parse(fs_1.default.readFileSync('angular.json').toString());
         var assetsArray = angularWorkspace.projects[pwaIconsConfig.projectName].architect.build.options.assets;
-        var appleTouchIcon = pwaIconsConfig.projectRootPath + "/apple-touch-icon.png";
+        var appleTouchIcon = pwaIconsConfig.projectSourceRootPath + "/apple-touch-icon.png";
         if (assetsArray.includes(appleTouchIcon)) {
             console.log(colors_1.default.yellow("\u2605 Finished"));
         }

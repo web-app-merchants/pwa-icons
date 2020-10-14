@@ -249,7 +249,7 @@ const updateAngularJSON = (pwaIconsConfig: PWAIconsConfig) => {
 
    const assetsArray: string[] = angularWorkspace.projects[pwaIconsConfig.projectName].architect.build.options.assets;
 
-   const appleTouchIcon = `${pwaIconsConfig.projectRootPath}/apple-touch-icon.png`;
+   const appleTouchIcon = `${pwaIconsConfig.projectSourceRootPath}/apple-touch-icon.png`;
 
    
     
