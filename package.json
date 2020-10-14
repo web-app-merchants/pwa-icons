@@ -1,5 +1,5 @@
 {
-  "name": "@wam/pwa-icons",
+  "name": "@webappm/pwa-icons",
   "version": "1.0.0",
   "description": "Generate default @angular/pwa icon set for angular projects using a custom .png icon.",
   "main": "dist/index.js",
