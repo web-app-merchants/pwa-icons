@@ -47,7 +47,8 @@ For good results, your `icon.png` file should be:
 `-h` or `--help` Show help   
 `-v` or `--version` Show package version number   
 `-d` or `--dry-run` Run through without making any changes  
-`-i` or `--icon` Original icon to convert (defaults to **"./icon.png"**)   
+`-p` or `--project` Project name as defined in angular.json  
+`-i` or `--icon` Original icon to convert (defaults to **"icon.png"**)   
 `-o` or `--output` Output folder  (defaults to **"./src/assets/icons"**)   
 `-fo` or `--faviconOutput` Output folder for favicon.ico  (defaults to **"./src"**) 
 `-n` or `--name` Icon name.   

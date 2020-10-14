@@ -1,4 +1,5 @@
 export interface PWAIconsConfig {
+ projectName: string;
  iconInput: string;
  iconOutput: string;
  faviconOutput: string;
