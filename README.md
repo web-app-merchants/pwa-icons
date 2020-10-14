@@ -24,16 +24,16 @@ project-name
 └───icon.png ✓
 ```
 
-3. Add pwa-icons to your angular app.
+3. Install pwa-icons to your angular app.
 
 ```bash
-$ ng add @wam/pwa-icons --project=project-name
+$ npm install @wam/pwa-icons
 ```  
 
 4. You can also generate pwa-icons for your angular app.
 
 ```bash
-$ ng generate @wam/pwa-icons --project=project-name
+$ ng run @wam/pwa-icons --project=project-name
 ```  
 
 For good results, your `icon.png` file should be:
