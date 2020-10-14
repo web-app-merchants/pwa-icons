@@ -11,7 +11,12 @@
     "type": "git",
     "url": "git+https://github.com/web-app-merchants/pwa-icons.git"
   },
-  "keywords": [],
+  "keywords": [
+    "angular",
+    "pwa",
+    "progressive web apps",
+    "icons"
+  ],
   "author": "Web App Merchants",
   "license": "ISC",
   "bugs": {
