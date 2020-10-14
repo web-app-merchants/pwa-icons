@@ -5,6 +5,8 @@
 /src/apple-touch-icon.png
 /dist
 
+angular.json
+
 *.tgz
 *.png
 

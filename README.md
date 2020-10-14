@@ -30,7 +30,7 @@ project-name
 $ npm install @webappm/pwa-icons --save-dev
 ```  
 
-4. You can also generate pwa-icons for your angular app.
+4. You can also generate wam-pwa-icons for your angular app.
 
 ```bash
 $ ng run @webappm/pwa-icons --project=project-name
