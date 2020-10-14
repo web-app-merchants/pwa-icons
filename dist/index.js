@@ -235,6 +235,7 @@ var getFileExtension = function (iconInput) {
 var iconExists = function (iconPath) {
     return new Promise(function (resolve, reject) {
         if (fs_1.default.existsSync(iconPath)) {
+            console.log(iconPath);
             console.log(colors_1.default.blue("\u2713 '" + iconPath + "' exists."));
             console.log(colors_1.default.blue('-'.repeat(process.stdout.columns)));
             resolve(true);
