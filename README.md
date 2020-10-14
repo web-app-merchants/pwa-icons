@@ -33,7 +33,7 @@ $ npm install @webappm/pwa-icons
 4. You can also generate pwa-icons for your angular app.
 
 ```bash
-$ ng run @wam/pwa-icons --project=project-name
+$ ng run @webappm/pwa-icons --project=project-name
 ```  
 
 For good results, your `icon.png` file should be:
