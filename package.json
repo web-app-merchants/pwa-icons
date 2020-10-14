@@ -11,7 +11,7 @@
     "dist"
   ],
   "bin": {
-    "wam-pwa-icons": "./dist/index.js"
+    "wam-pwa-icons": "./dist/wam-pwa-icons.js"
   },
   "repository": {
     "type": "git",
