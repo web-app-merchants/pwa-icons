@@ -9,11 +9,12 @@ import { PWAIconsConfig } from './pwa-icons-config.interface';
 const defaultProject = 'defaultProject';
 const defaultIconInput = 'icon.png';
 const defaultIconOutput = 'assets/icons';
-const defaultFaviconOutput = './src';
+const defaultFaviconOutput = '';
 const sizes = '512, 384, 192, 152, 144, 128, 96, 72';
 
 let projectName = '';
 let projectRootPath = '';
+let projectSourceRootPath = '';
 let iconInput = '';
 let iconOutput = '';
 let faviconOutput = '';
@@ -42,6 +43,7 @@ let faviconsConfig: favicons.Configuration = {
 let pwaIconsConfig: PWAIconsConfig = {
   projectName,
   projectRootPath,
+  projectSourceRootPath,
   iconInput,
   iconOutput,
   faviconOutput,
@@ -135,13 +137,15 @@ const getProjectPath = (pwaIconConfig: PWAIconsConfig) => {
     }
 
     projectRootPath = angularWorkspace.projects[projectName].root;
+    projectSourceRootPath = angularWorkspace.projects[projectName].sourceRoot;
 
     pwaIconsConfig = {
       ...pwaIconsConfig,
       projectName,
       projectRootPath,
+      projectSourceRootPath,
       iconInput: `./${projectRootPath}/${iconInput}`,
-      faviconOutput: `./${projectRootPath}`,
+      faviconOutput: `./${projectSourceRootPath}`,
       iconOutput: `./${projectRootPath}/${iconOutput}`,
     };
 

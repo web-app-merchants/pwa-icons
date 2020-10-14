@@ -23,10 +23,11 @@ var yargs_1 = __importDefault(require("yargs"));
 var defaultProject = 'defaultProject';
 var defaultIconInput = 'icon.png';
 var defaultIconOutput = 'assets/icons';
-var defaultFaviconOutput = './src';
+var defaultFaviconOutput = '';
 var sizes = '512, 384, 192, 152, 144, 128, 96, 72';
 var projectName = '';
 var projectRootPath = '';
+var projectSourceRootPath = '';
 var iconInput = '';
 var iconOutput = '';
 var faviconOutput = '';
@@ -53,6 +54,7 @@ var faviconsConfig = {
 var pwaIconsConfig = {
     projectName: projectName,
     projectRootPath: projectRootPath,
+    projectSourceRootPath: projectSourceRootPath,
     iconInput: iconInput,
     iconOutput: iconOutput,
     faviconOutput: faviconOutput,
@@ -130,8 +132,10 @@ var getProjectPath = function (pwaIconConfig) {
             console.log(colors_1.default.cyan("\uD83D\uDEC8  Using project: " + projectName));
         }
         projectRootPath = angularWorkspace.projects[projectName].root;
+        projectSourceRootPath = angularWorkspace.projects[projectName].sourceRoot;
         pwaIconsConfig = __assign(__assign({}, pwaIconsConfig), { projectName: projectName,
-            projectRootPath: projectRootPath, iconInput: "./" + projectRootPath + "/" + iconInput, faviconOutput: "./" + projectRootPath, iconOutput: "./" + projectRootPath + "/" + iconOutput });
+            projectRootPath: projectRootPath,
+            projectSourceRootPath: projectSourceRootPath, iconInput: "./" + projectRootPath + "/" + iconInput, faviconOutput: "./" + projectSourceRootPath, iconOutput: "./" + projectRootPath + "/" + iconOutput });
         iconExists(pwaIconsConfig.iconInput);
     }
     catch (_a) {
