@@ -117,7 +117,6 @@ pwaIconsConfig = __assign(__assign({}, pwaIconsConfig), { projectName: projectNa
     faviconOutput: faviconOutput,
     sizesArray: sizesArray,
     isDryRun: isDryRun });
-console.log(pwaIconsConfig);
 var getProjectPath = function (pwaIconConfig) {
     var projectName = '';
     try {
