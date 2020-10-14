@@ -289,6 +289,7 @@ const getFileExtension = (iconInput: string): string => {
 const iconExists = (iconPath: string): Promise<never | boolean> => {
   return new Promise((resolve, reject) => {
     if (fs.existsSync(iconPath)) {
+      console.log(iconPath);
       console.log(colors.blue(`✓ '${iconPath}' exists.`));
       console.log(colors.blue('-'.repeat(process.stdout.columns)));
       resolve(true);
