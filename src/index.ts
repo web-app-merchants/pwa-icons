@@ -146,7 +146,7 @@ const getProjectPath = (pwaIconConfig: PWAIconsConfig) => {
       projectSourceRootPath,
       iconInput: `./${projectRootPath}/${iconInput}`,
       faviconOutput: `./${projectSourceRootPath}`,
-      iconOutput: `./${projectRootPath}/${iconOutput}`,
+      iconOutput: `./${projectSourceRootPath}/${iconOutput}`,
     };
 
     iconExists(pwaIconsConfig.iconInput);

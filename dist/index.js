@@ -135,7 +135,7 @@ var getProjectPath = function (pwaIconConfig) {
         projectSourceRootPath = angularWorkspace.projects[projectName].sourceRoot;
         pwaIconsConfig = __assign(__assign({}, pwaIconsConfig), { projectName: projectName,
             projectRootPath: projectRootPath,
-            projectSourceRootPath: projectSourceRootPath, iconInput: "./" + projectRootPath + "/" + iconInput, faviconOutput: "./" + projectSourceRootPath, iconOutput: "./" + projectRootPath + "/" + iconOutput });
+            projectSourceRootPath: projectSourceRootPath, iconInput: "./" + projectRootPath + "/" + iconInput, faviconOutput: "./" + projectSourceRootPath, iconOutput: "./" + projectSourceRootPath + "/" + iconOutput });
         iconExists(pwaIconsConfig.iconInput);
     }
     catch (_a) {
